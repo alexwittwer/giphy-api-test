@@ -25,20 +25,24 @@
       const button = document.querySelector("button");
       const form = document.querySelector("form");
 
+      async function getGiphy(term) {
+        try {
+          const response = await fetch(
+            `https://api.giphy.com/v1/gifs/translate?api_key=zgYLOVnlnl0N9DtGstt38h2XJE8EUbcQ&s=${term}&weirdness=8`,
+            { mode: "cors" }
+          );
+          const results = await response.json();
+          const newGiphy = results.data.images.original.url;
+          image.src = newGiphy;
+        } catch {
+          image.src = "https://i.gifer.com/y7.gif";
+          throw new Error("Couldn't find images matching search terms");
+        }
+      }
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        const searchBar = search.value;
-        fetch(
-          `https://api.giphy.com/v1/gifs/translate?api_key=zgYLOVnlnl0N9DtGstt38h2XJE8EUbcQ&s=${searchBar}&weirdness=8`,
-          { mode: "cors" }
-        )
-          .then((response) => response.json())
-          .then((results) => (image.src = results.data.images.original.url))
-          .catch((err) => {
-            // clear img
-            image.src = "https://i.gifer.com/y7.gif";
-            throw new Error("No results");
-          });
+        const term = search.value;
+        getGiphy(term);
       });
     </script>
   </body>
