@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>oneGif</h1>
+      <form class="search-bar">
+        <input type="search" name="search" id="search" required />
+        <button type="submit">Lucky gif</button>
+      </form>
+      <img />
+    </div>
+    <script>
+      const image = document.querySelector("img");
+      const search = document.querySelector("input");
+      const button = document.querySelector("button");
+      const form = document.querySelector("form");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const searchBar = search.value;
+        fetch(
+          `https://api.giphy.com/v1/gifs/translate?api_key=zgYLOVnlnl0N9DtGstt38h2XJE8EUbcQ&s=${searchBar}&weirdness=8`,
+          { mode: "cors" }
+        )
+          .then((response) => response.json())
+          .then((results) => (image.src = results.data.images.original.url))
+          .catch((err) => {
+            // clear img
+            image.src = "https://i.gifer.com/y7.gif";
+            throw new Error("No results");
+          });
+      });
+    </script>
+  </body>
+</html>
